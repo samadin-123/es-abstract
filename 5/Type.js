@@ -5,22 +5,26 @@ var isObject = require('es-object-atoms/isObject');
 // https://262.ecma-international.org/5.1/#sec-8
 
 module.exports = function Type(x) {
+	// Fast-path for most common primitives using typeof
+	var t = typeof x;
+	if (t === 'number') {
+		return 'Number';
+	}
+	if (t === 'string') {
+		return 'String';
+	}
+	if (t === 'undefined') {
+		return 'Undefined';
+	}
+	if (t === 'boolean') {
+		return 'Boolean';
+	}
+	// null check after primitives
 	if (x === null) {
 		return 'Null';
 	}
-	if (typeof x === 'undefined') {
-		return 'Undefined';
-	}
+	// Object check last (requires function call)
 	if (isObject(x)) {
 		return 'Object';
-	}
-	if (typeof x === 'number') {
-		return 'Number';
-	}
-	if (typeof x === 'boolean') {
-		return 'Boolean';
-	}
-	if (typeof x === 'string') {
-		return 'String';
 	}
 };
